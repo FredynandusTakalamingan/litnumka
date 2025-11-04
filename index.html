@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portal Dashboard Literasi • Numerasi • Karakter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --glass: rgba(255,255,255,0.06);
+      --accent1: #4f46e5;
+      --accent2: #06b6d4;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+    .glass {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .btn-grad {
+      background: linear-gradient(90deg,var(--accent1),var(--accent2));
+      transition: transform 0.3s ease;
+    }
+    .btn-grad:hover {transform: scale(1.05);}
+    @keyframes fadeIn {
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+    .fade-in {opacity:0;}
+    .visible {animation: fadeIn 1s ease forwards;}
+
+    /* 🌈 Efek hover ikon media sosial */
+    .social-icon {
+      transition: all 0.3s ease;
+      transform: scale(1);
+    }
+    .social-icon:hover {
+      transform: scale(1.2);
+      text-shadow: 0 0 12px currentColor;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 text-slate-100">
+  <main class="max-w-6xl mx-auto px-6 py-8 space-y-10">
+
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 fade-in">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl btn-grad flex items-center justify-center shadow-xl">
+          <i class="fas fa-chart-line text-white text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-semibold leading-tight">Portal Pemantauan Pembelajaran</h1>
+          <p class="text-sm text-slate-300">Akses cepat: Dashboard, Evaluasi, dan Rapor Pendidikan 2025</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 justify-start md:justify-end">
+        <button onclick="showGuide()" class="px-4 py-2 rounded-md glass text-sm">📘 Panduan Singkat</button>
+        <a href="https://www.instagram.com/fredy_takalamingan/?hl=id" target="_blank" class="px-4 py-2 rounded-md glass text-sm flex items-center gap-2">
+          <i class="fab fa-instagram"></i> Kontak Admin
+        </a>
+      </div>
+    </header>
+
+    <!-- Cards Section -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
+      <article class="p-6 rounded-2xl glass hover:shadow-lg">
+        <h2 class="text-lg font-semibold mb-2">Dashboard Terpadu</h2>
+        <p class="text-sm text-slate-300 mb-6">Lihat rekap per kelas, jenis kelamin, dan indikator literasi, numerasi, karakter.</p>
+        <a href="https://lookerstudio.google.com/reporting/f620af19-cc1f-40ba-87e7-e387bd541305" target="_blank" class="btn-grad inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow-lg">📊 Buka Dashboard</a>
+      </article>
+
+      <article class="p-6 rounded-2xl glass hover:shadow-lg">
+        <h2 class="text-lg font-semibold mb-2">Form Evaluasi</h2>
+        <p class="text-sm text-slate-300 mb-6">Berikan tanggapan dan evaluasi terkait literasi, numerasi, dan karakter.</p>
+        <a href="https://forms.gle/DMAzkkUUUbPFqEYT6" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold bg-white text-slate-900 shadow-lg">📝 Isi Evaluasi</a>
+      </article>
+
+      <article class="p-6 rounded-2xl glass hover:shadow-lg">
+        <h2 class="text-lg font-semibold mb-2">Rapor Pendidikan 2025</h2>
+        <p class="text-sm text-slate-300 mb-6">Akses rapor pendidikan sekolah tahun 2025 menggunakan akun belajar.id SMA.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1gUSZ8pWrKECUAPTXPTCNRp-R1fd1DfxgQ-qDlU3Gmd8/edit?usp=sharing" target="_blank" class="btn-grad inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow-lg">📘 Buka Rapor Pendidikan</a>
+      </article>
+    </section>
+
+    <!-- Form Saran dan Masukan -->
+    <section class="p-6 rounded-2xl glass fade-in">
+      <h2 class="text-lg font-semibold mb-4">💬 Saran dan Masukan</h2>
+      <p class="text-sm text-slate-300 mb-4">Silakan isi saran Anda untuk pengembangan portal ini. Semua masukan dapat diakses kembali.</p>
+      <form id="feedbackForm" class="flex flex-col gap-4">
+        <input type="text" id="name" placeholder="Nama Anda" class="px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <textarea id="message" placeholder="Tulis saran dan masukan Anda di sini..." class="px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 h-32"></textarea>
+        <button type="button" onclick="saveFeedback()" class="btn-grad px-4 py-2 rounded-lg font-semibold">Kirim Saran</button>
+      </form>
+      <div id="feedbackList" class="mt-6 text-sm text-slate-300"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-slate-400 text-sm py-6 fade-in space-y-3">
+      <p>Hubungi Admin: <strong class="text-white">FreTax</strong> — 
+        <a href="https://www.instagram.com/fredy_takalamingan/?hl=id" target="_blank" class="underline hover:text-white">@fredy_takalamingan</a>
+      </p>
+
+      <div class="flex justify-center gap-8 text-base">
+        <a href="https://www.facebook.com/maxy.awondatu" target="_blank" class="hover:text-white flex items-center gap-2 transition">
+          <i class="fab fa-facebook text-blue-500 social-icon"></i> Media Sosial Kepala Sekolah
+        </a>
+        <a href="https://www.instagram.com/sman2_bitung_official/?hl=id" target="_blank" class="hover:text-white flex items-center gap-2 transition">
+          <i class="fab fa-instagram text-pink-500 social-icon"></i> Media Sosial Sekolah
+        </a>
+      </div>
+
+      <p class="pt-3">© 2025 SMA Negeri 2 Bitung — Portal Pemantauan Pembelajaran<br>
+      <span class="text-slate-500 text-xs">Dikembangkan oleh <strong class="text-white">FreTax</strong></span></p>
+    </footer>
+
+  </main>
+
+  <!-- Modal Panduan Singkat -->
+  <div id="guideModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-50">
+    <div class="w-[90%] md:w-2/3 lg:w-1/2 bg-slate-900 rounded-2xl p-8 text-center fade-in shadow-2xl">
+      <h2 class="text-xl font-semibold mb-4">Panduan Singkat</h2>
+      <p class="text-slate-300 text-sm leading-relaxed mb-6">
+        1️⃣ Klik <strong>Buka Dashboard</strong> untuk melihat data literasi, numerasi, dan karakter.<br>
+        2️⃣ Klik <strong>Isi Evaluasi</strong> untuk memberikan tanggapan.<br>
+        3️⃣ Gunakan akun <strong>belajar.id</strong> untuk membuka Rapor Pendidikan.<br>
+        4️⃣ Klik <strong>Kontak Admin</strong> untuk bantuan melalui Instagram.
+      </p>
+      <button onclick="closeGuide()" class="px-4 py-2 rounded-md btn-grad text-sm font-semibold">Tutup Panduan</button>
+    </div>
+  </div>
+
+  <script>
+    // Modal Panduan
+    function showGuide(){document.getElementById('guideModal').classList.remove('hidden');}
+    function closeGuide(){document.getElementById('guideModal').classList.add('hidden');}
+
+    // Simpan Saran
+    function saveFeedback(){
+      const name=document.getElementById('name').value.trim()||'Anonim';
+      const message=document.getElementById('message').value.trim();
+      if(!message){alert('Harap isi pesan.');return;}
+      const list=document.getElementById('feedbackList');
+      const entry=document.createElement('div');
+      entry.className='border-t border-white/10 pt-2 mt-2';
+      entry.innerHTML=`<strong>${name}</strong>: ${message}`;
+      list.prepend(entry);
+      document.getElementById('feedbackForm').reset();
+    }
+
+    // ✨ Animasi muncul saat scroll (Scroll Reveal)
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
