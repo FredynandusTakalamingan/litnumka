@@ -84,7 +84,7 @@
     <!-- Form Saran dan Masukan -->
     <section class="p-6 rounded-2xl glass fade-in">
       <h2 class="text-lg font-semibold mb-4">💬 Saran dan Masukan</h2>
-      <p class="text-sm text-slate-300 mb-4">Silakan isi saran Anda untuk pengembangan portal ini. Semua masukan dapat diakses kembali secara daring.</p>
+      <p class="text-sm text-slate-300 mb-4">Silakan isi saran Anda untuk pengembangan portal ini. Semua masukan dapat diakses kembali.</p>
       <form id="feedbackForm" class="flex flex-col gap-4">
         <input type="text" id="name" placeholder="Nama Anda" class="px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <textarea id="message" placeholder="Tulis saran dan masukan Anda di sini..." class="px-4 py-2 rounded-lg bg-slate-800 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 h-32"></textarea>
@@ -129,33 +129,30 @@
   </div>
 
   <script>
-    // Ganti placeholder ini dengan URL Web App dari Google Apps Script
-    const apiURL = "https://script.google.com/macros/s/PASTE_WEB_APP_URL_HERE/exec";
+    // Modal Panduan
+    function showGuide(){document.getElementById('guideModal').classList.remove('hidden');}
+    function closeGuide(){document.getElementById('guideModal').classList.add('hidden');}
 
-    async function saveFeedback() {
+    // Simpan dan tampilkan Saran dari localStorage
+    function saveFeedback() {
       const name = document.getElementById('name').value.trim() || 'Anonim';
       const message = document.getElementById('message').value.trim();
       if (!message) { alert('Harap isi pesan.'); return; }
 
-      await fetch(apiURL, {
-        method: 'POST',
-        body: JSON.stringify({ name, message }),
-        headers: { 'Content-Type': 'application/json' }
-      });
+      const feedback = { name, message, time: new Date().toLocaleString() };
+      let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+      feedbacks.unshift(feedback);
+      localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
 
+      renderFeedbacks();
       document.getElementById('feedbackForm').reset();
-      await renderFeedbacks();
     }
 
-    async function renderFeedbacks() {
+    function renderFeedbacks() {
       const list = document.getElementById('feedbackList');
-      list.innerHTML = '<p class="text-slate-400 text-sm">⏳ Memuat saran...</p>';
-
-      const res = await fetch(apiURL);
-      const feedbacks = await res.json();
       list.innerHTML = '';
-
-      feedbacks.reverse().forEach(fb => {
+      const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+      feedbacks.forEach(fb => {
         const entry = document.createElement('div');
         entry.className = 'border-t border-white/10 pt-2 mt-2';
         entry.innerHTML = `<strong>${fb.name}</strong> <span class="text-xs text-slate-400">(${fb.time})</span>: ${fb.message}`;
@@ -163,11 +160,8 @@
       });
     }
 
+    // Jalankan saat halaman dimuat
     document.addEventListener('DOMContentLoaded', renderFeedbacks);
-
-    // Modal Panduan
-    function showGuide(){document.getElementById('guideModal').classList.remove('hidden');}
-    function closeGuide(){document.getElementById('guideModal').classList.add('hidden');}
 
     // Animasi muncul saat scroll
     const observer = new IntersectionObserver(entries => {
