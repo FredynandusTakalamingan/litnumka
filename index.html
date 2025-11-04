@@ -33,16 +33,8 @@
     }
     .fade-in {opacity:0;}
     .visible {animation: fadeIn 1s ease forwards;}
-
-    /* 🌈 Efek hover ikon media sosial */
-    .social-icon {
-      transition: all 0.3s ease;
-      transform: scale(1);
-    }
-    .social-icon:hover {
-      transform: scale(1.2);
-      text-shadow: 0 0 12px currentColor;
-    }
+    .social-icon {transition: all 0.3s ease; transform: scale(1);}
+    .social-icon:hover {transform: scale(1.2); text-shadow: 0 0 12px currentColor;}
   </style>
 </head>
 
@@ -122,7 +114,7 @@
 
   </main>
 
-  <!-- Modal Panduan Singkat -->
+  <!-- Modal Panduan -->
   <div id="guideModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-50">
     <div class="w-[90%] md:w-2/3 lg:w-1/2 bg-slate-900 rounded-2xl p-8 text-center fade-in shadow-2xl">
       <h2 class="text-xl font-semibold mb-4">Panduan Singkat</h2>
@@ -141,25 +133,40 @@
     function showGuide(){document.getElementById('guideModal').classList.remove('hidden');}
     function closeGuide(){document.getElementById('guideModal').classList.add('hidden');}
 
-    // Simpan Saran
-    function saveFeedback(){
-      const name=document.getElementById('name').value.trim()||'Anonim';
-      const message=document.getElementById('message').value.trim();
-      if(!message){alert('Harap isi pesan.');return;}
-      const list=document.getElementById('feedbackList');
-      const entry=document.createElement('div');
-      entry.className='border-t border-white/10 pt-2 mt-2';
-      entry.innerHTML=`<strong>${name}</strong>: ${message}`;
-      list.prepend(entry);
+    // Simpan dan tampilkan Saran dari localStorage
+    function saveFeedback() {
+      const name = document.getElementById('name').value.trim() || 'Anonim';
+      const message = document.getElementById('message').value.trim();
+      if (!message) { alert('Harap isi pesan.'); return; }
+
+      const feedback = { name, message, time: new Date().toLocaleString() };
+      let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+      feedbacks.unshift(feedback);
+      localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+      renderFeedbacks();
       document.getElementById('feedbackForm').reset();
     }
 
-    // ✨ Animasi muncul saat scroll (Scroll Reveal)
+    function renderFeedbacks() {
+      const list = document.getElementById('feedbackList');
+      list.innerHTML = '';
+      const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+      feedbacks.forEach(fb => {
+        const entry = document.createElement('div');
+        entry.className = 'border-t border-white/10 pt-2 mt-2';
+        entry.innerHTML = `<strong>${fb.name}</strong> <span class="text-xs text-slate-400">(${fb.time})</span>: ${fb.message}`;
+        list.appendChild(entry);
+      });
+    }
+
+    // Jalankan saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', renderFeedbacks);
+
+    // Animasi muncul saat scroll
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.2 });
 
